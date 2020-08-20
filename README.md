@@ -1,5 +1,18 @@
 # UseContext Demo
 
+- It's good practice to have many smaller components versus one ginormous component. (Why?)
+- One of the side-effects from that is that you may have to pass values or props from parent to child, multiple levels.
+- If you have a state that multiple components need, especially if they're nested within each other, consider using React's Context API.
+- **Note:** You will see a slightly different implementation on how William does this later today. That's totally okay. Keep an eye out for the subtle similarities and differences between the two and ask questions in Zoom or Slack.
+
+### Vocabulary
+
+[(via the React Docs)](https://reactjs.org/docs/context.html#api) Note that they use React class examples, and we'll implement this using React hooks.
+
+- Context: "When React renders a component that subscribes to this Context object it will read the current context value from the closest matching Provider above it in the tree."
+- Provider: "Every Context object comes with a Provider React component that allows consuming components to subscribe to context changes."
+- Consumer: A consumer is "a React component that subscribes to context changes."
+
 ## User Stories
 
 - We have a React app that uses `react-router-dom` that contains a Home page and an About page which runs Home and About components.
@@ -13,7 +26,7 @@
 
 - [ ] Include `import { createContext } from "react";`
 - [ ] Don't forget to export the module at `export const UserContext = createContext();`
-- [ ] Pass `createContext` a value; it's set when you try to use this context with no provider
+- [ ] You can pass `createContext` a parameter; if you do, it's set when you try to use this context with no provider
 
 ### In App.js
 
