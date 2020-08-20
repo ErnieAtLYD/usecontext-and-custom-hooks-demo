@@ -1,68 +1,72 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# UseContext Demo
 
-## Available Scripts
+## User Stories
 
-In the project directory, you can run:
+- We have a React app that uses `react-router-dom` that contains a Home page and an About page which runs Home and About components.
+- We want to use a React state that stores a JavaScript object of a user.
+- We want the home page to have a button that mocks a login. When the button is clicked, a user object is saved to the user state.
+- The user state should be accessible from the both the Home and About components.
 
-### `yarn start`
+## Building out the thing
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Create the `UserContext.js` file
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- [ ] Include `import { createContext } from "react";`
+- [ ] Don't forget to export the module at `export const UserContext = createContext();`
+- [ ] Pass `createContext` a value; it's set when you try to use this context with no provider
 
-### `yarn test`
+### In App.js
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- [ ] Include `import { UserContext } from "./UserContext"`
+- [ ] Wrap the components you want to give the context access to in a `<UserContext.Provider></UserContext.Provider>`
+- [ ] Add a `value` attribute
 
-### `yarn build`
+### In the components you want to use this context (`src/components/About.js` and `src/components/Index.js`)
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- [ ] Include `import { UserContext } from "../UserContext"`
+- [ ] Inside the component, assign `React.useContext(UserContext)` to a variable to use it within the JSX
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Right now, UserContext is only passing a string. Let's try passing an object with two properties: value and setValue.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- [ ] In App.js, change "test value" in line 21 to {{value, setValue}} (two curly brackets because we are passing an object to JSX)
+- [ ] In App.js add `const [value, setValue] = useState("default message");` after line 8
+- [ ] In `/src/components/About.js` and `/src/components/Index.js`, change `msg` in line 5 to `{ value, setValue }`
 
-### `yarn eject`
+Neat. So right now we're passing a state named value that says "default message."
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+That in itself is kinda whatever. Maybe we want a way to remember a user on login that other components can have access to.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [ ] Change `value` and `setValue` to `user` and `setUser`.
+- [ ] In About and Index components, we're going to make it slightly easier for us to debug the user variable. Add `return <pre>{JSON.stringify(user, null, 2)}</pre>;`.
+- [ ] I also added `<h1></h1>` header tags to both components.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+Create a fake login button on the Index component
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- [ ] Create a new file: `/src/utils/login.js`
+- [ ] Create an asynchronous module called login returns a user object. Export the module. Mine looks like this:
 
-## Learn More
+```
+export const login = async () => {
+  return {
+    id: 4,
+    username: "ernie",
+    email: "ernie@wyncode.co"
+  };
+};
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- [ ] In Index.js, change the button onClick handler to the following:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```
+onClick={async () => {
+  const user = await login();
+  setUser(user);
+}}
+```
 
-### Code Splitting
+- [ ] In Index.js, add a ternary statement so user is shown button labeled "Sign out" if there is no `user` exists, otherwise, show our previous button and handler
+- [ ] Add the JS that will `setUser(null)` on clicking the logout button
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+## Resources
 
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+- [The React useContext Hook in a Nutshell](https://www.digitalocean.com/community/tutorials/react-usecontext)
